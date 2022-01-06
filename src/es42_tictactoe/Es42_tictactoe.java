@@ -566,7 +566,7 @@ public class Es42_tictactoe extends Application implements Initializable {
                                                 Move perfectMove = findBestMove();
                                                 minimaxBoard[perfectMove.row][perfectMove.col] = 'o';
                                                 gameBoxes[perfectMove.row][perfectMove.col].setText("o");
-                                                gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: blue");
+                                                gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: red");
                                                 if (evaluate() == 10) {//Computer won
                                                     Platform.runLater(new Runnable() {
                                                         @Override
@@ -613,7 +613,7 @@ public class Es42_tictactoe extends Application implements Initializable {
                                                 Move perfectMove = findBestMove();
                                                 minimaxBoard[perfectMove.row][perfectMove.col] = 'o';
                                                 gameBoxes[perfectMove.row][perfectMove.col].setText("o");
-                                                gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: blue");
+                                                gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: red");
                                                 if (evaluate() == 10) {//Computer won
                                                     Platform.runLater(new Runnable() {
                                                         @Override
@@ -638,7 +638,7 @@ public class Es42_tictactoe extends Application implements Initializable {
                                             Move perfectMove = findBestMove();
                                             minimaxBoard[perfectMove.row][perfectMove.col] = 'o';
                                             gameBoxes[perfectMove.row][perfectMove.col].setText("o");
-                                            gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: blue");
+                                            gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: red");
                                             if (evaluate() == 10) {//Computer won
                                                 Platform.runLater(new Runnable() {
                                                     @Override
@@ -693,4 +693,220 @@ public class Es42_tictactoe extends Application implements Initializable {
                                         }//if
                                     }
                                     break;
-}
+                                case "Y Axis":
+                                    if (stickValue == 1.0f) {//I'm going down
+                                        if (!isWinner[0]) {
+                                            cord[0]++;
+                                            if (cord[0] == 3) {
+                                                cord[0] = 0;
+                                            }
+                                            Platform.runLater(() -> {
+                                                gameBoxes[cord[0]][cord[1]].requestFocus();
+                                                gameBoxes[cord[0]][cord[1]].deselect();
+                                            });//Platform
+                                        }//if
+                                    }//if
+                                    else if (stickValue == -1.0f) {//I'm going up
+                                        if (!isWinner[0]) {
+                                            cord[0]--;
+                                            if (cord[0] < 0) {
+                                                cord[0] = 2;
+                                            }
+                                            Platform.runLater(() -> {
+                                                gameBoxes[cord[0]][cord[1]].requestFocus();
+                                                gameBoxes[cord[0]][cord[1]].deselect();
+                                            });
+                                        }//if
+                                    }//else if
+                                    break;
+                                case "Button 1":
+                                    sceneID = 0;
+                                    Platform.runLater(() -> {
+                                        primaryStage.setScene(homeScene);
+                                        primaryStage.setFullScreen(true);
+                                    } //run method
+                                    );//Platform runLater
+                                    break;
+                                case "Button 2":
+                                    if (isWinner[0] || stickValue == 0) {
+                                        break;
+                                    }//if
+                                    if (gameBoxes[cord[0]][cord[1]].getText().equals("")) {
+                                        switch (turn[0]) {
+                                            case 0:
+                                                gameBoxes[cord[0]][cord[1]].setText("o");
+                                                gameBoxes[cord[0]][cord[1]].setStyle("-fx-text-inner-color: blue");
+                                                turn[0] = 1;
+                                                break;
+                                            case 1:
+                                                gameBoxes[cord[0]][cord[1]].setText("x");
+                                                gameBoxes[cord[0]][cord[1]].setStyle("-fx-text-inner-color: red");
+                                                turn[0] = 0;
+                                                break;
+                                        }
+                                        if (gameBoxes[cord[0]][0].getText().equals(gameBoxes[cord[0]][1].getText()) && gameBoxes[cord[0]][0].getText().equals(gameBoxes[cord[0]][2].getText())) {
+                                            playerScore[turn[0]]++;//'O' won
+                                            gameBoxes[cord[0]][0].setStyle("-fx-background-color: lime");
+                                            gameBoxes[cord[0]][1].setStyle("-fx-background-color: lime");
+                                            gameBoxes[cord[0]][2].setStyle("-fx-background-color: lime");
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (turn[0] == 1) {
+                                                            winRoot = FXMLLoader.load(this.getClass().getResource("OWinScene.fxml"));
+                                                        } else {
+                                                            winRoot = FXMLLoader.load(this.getClass().getResource("XWinScene.fxml"));
+                                                        }
+                                                    } catch (Exception e) {
+                                                        System.out.println(e.getMessage());
+                                                    }//catch
+                                                    winScene = new Scene(winRoot);
+                                                    sceneID = 3;
+                                                }//run
+                                            });
+                                            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                            delay.setOnFinished(x -> primaryStage.setScene(winScene));
+                                            delay.play();
+                                        }//if 
+                                        else if (gameBoxes[0][cord[1]].getText().equals(gameBoxes[1][cord[1]].getText()) && gameBoxes[0][cord[1]].getText().equals(gameBoxes[2][cord[1]].getText())) {
+                                            playerScore[turn[0]]++;//Player Won
+                                            gameBoxes[0][cord[1]].setStyle("-fx-background-color: lime");
+                                            gameBoxes[1][cord[1]].setStyle("-fx-background-color: lime");
+                                            gameBoxes[2][cord[1]].setStyle("-fx-background-color: lime");
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (turn[0] == 1) {
+                                                            winRoot = FXMLLoader.load(this.getClass().getResource("OWinScene.fxml"));
+                                                        } else {
+                                                            winRoot = FXMLLoader.load(this.getClass().getResource("XWinScene.fxml"));
+                                                        }
+                                                    } catch (Exception e) {
+                                                        System.out.println(e.getMessage());
+                                                    }//catch
+                                                    winScene = new Scene(winRoot);
+                                                    sceneID = 3;
+                                                }//run
+                                            });
+                                            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                            delay.setOnFinished(x -> primaryStage.setScene(winScene));
+                                            delay.play();
+                                        }//else if
+                                        else if (cord[0] == cord[1]) {
+                                            if (gameBoxes[0][0].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][0].getText().equals(gameBoxes[2][2].getText())) {
+                                                playerScore[turn[0]]++;//Player Won
+                                                gameBoxes[0][0].setStyle("-fx-background-color: lime");
+                                                gameBoxes[1][1].setStyle("-fx-background-color: lime");
+                                                gameBoxes[2][2].setStyle("-fx-background-color: lime");
+                                                Platform.runLater(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            if (turn[0] == 1) {
+                                                                winRoot = FXMLLoader.load(this.getClass().getResource("OWinScene.fxml"));
+                                                            } else {
+                                                                winRoot = FXMLLoader.load(this.getClass().getResource("XWinScene.fxml"));
+                                                            }
+                                                        } catch (Exception e) {
+                                                            System.out.println(e.getMessage());
+                                                        }//catch
+                                                        winScene = new Scene(winRoot);
+                                                        sceneID = 3;
+                                                    }//run
+                                                });
+                                                PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                delay.setOnFinished(x -> primaryStage.setScene(winScene));
+                                                delay.play();
+                                            }//if
+                                        }//else if
+                                        else if ((cord[0] + cord[1]) == 2) {
+                                            if (gameBoxes[0][2].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][2].getText().equals(gameBoxes[2][0].getText())) {
+                                                playerScore[turn[0]]++;//Player Won
+                                                gameBoxes[0][2].setStyle("-fx-background-color: lime");
+                                                gameBoxes[1][1].setStyle("-fx-background-color: lime");
+                                                gameBoxes[2][0].setStyle("-fx-background-color: lime");
+                                                Platform.runLater(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            if (turn[0] == 1) {
+                                                                winRoot = FXMLLoader.load(this.getClass().getResource("OWinScene.fxml"));
+                                                            } else {
+                                                                winRoot = FXMLLoader.load(this.getClass().getResource("XWinScene.fxml"));
+                                                            }
+                                                        } catch (Exception e) {
+                                                            System.out.println(e.getMessage());
+                                                        }//catch
+                                                        winScene = new Scene(winRoot);
+                                                        sceneID = 3;
+                                                    }//run
+                                                });
+                                                PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                delay.setOnFinished(x -> primaryStage.setScene(winScene));
+                                                delay.play();
+                                            }//if
+                                        }//else if
+                                    }//if
+                                    break;
+                            }//switch
+                        }//while
+                        break;
+                    case 3:
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                primaryStage.setFullScreen(true);
+                            }
+                        });
+                        while (queue1.getNextEvent(event)) {
+                            Component stickComp = event.getComponent();
+                            float stickValue = event.getValue();
+                            switch (stickComp.getName()) {
+                                case "Button 1":
+                                    if (stickValue == 0) {
+                                        break;
+                                    }
+                                    Platform.runLater(() -> {
+                                        System.exit(0);
+                                    } //run method
+                                    );//Platform runLater
+                                    break;
+                            }//switch
+                        }//while
+                        break;
+                    default://Debugging Purpose
+                        System.out.println("Out Of bounds sceneID Value");
+                        System.exit(0);
+                }//switch
+                /* Thread sleep to let the Application thread run */
+                try {
+                    Thread.sleep(20);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }//while
+        } //run
+        );//thread
+        stickThread.start();
+        String css = this.getClass().getResource("Home.css").toExternalForm();
+        homeScene = new Scene(homeRoot);
+        homeScene.getStylesheets().add(css);
+        primaryStage.setScene(homeScene);
+        primaryStage.setFullScreen(true);
+        primaryStage.getIcons().add(icon);
+        primaryStage.setTitle("Tic_Tac_Toe");
+        primaryStage.show();
+    }//start
+
+    @Override
+    public void stop() {
+        System.exit(0);
+    }//stop
+
+    /* main method */
+    public static void main(String[] args) {
+        Application.launch(args);
+    }//main
+}//class Main
