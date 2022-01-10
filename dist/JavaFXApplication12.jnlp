@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="JavaFXApplication12.jnlp">
+  <information>
+    <title>JavaFXApplication12</title>
+    <vendor>4AKER</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="JavaFXApplication12.jar" size="11428" download="eager" />
+    <jar href="lib\jinput.jar" size="213608" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="javafxapplication12.es42_tictactoe"  name="JavaFXApplication12" />
+  <update check="always"/>
+</jnlp>
