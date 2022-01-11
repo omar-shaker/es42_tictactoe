@@ -84,8 +84,7 @@ public class Es42_tictactoe extends Application {
     public StackPane homeRoot = new StackPane();
     public StackPane gameRoot = new StackPane();
     public StackPane statusRoot = new StackPane();
-    public Scene homeScene = new Scene(homeRoot);
-    public Scene currentScene;
+    public Scene currentScene = new Scene(homeRoot);
     public Stage currentStage;
 
     public void clearBoard() {
@@ -1029,9 +1028,9 @@ public class Es42_tictactoe extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("TicTacToe");
-        primaryStage.setScene(homeScene);
+        primaryStage.setScene(currentScene);
         primaryStage.setFullScreen(true);
-        currentScene = primaryStage.getScene();
+        primaryStage.getIcons().add(new Image("file:images/icon.png"));
         currentStage = primaryStage;
         primaryStage.show();
     }
