@@ -366,12 +366,16 @@ public class Es42_tictactoe extends Application {
             sceneID = 1;
             gameMode = 0;
             currentScene.setRoot(gameRoot);
+            gameBoxes[yPos][xPos].requestFocus();
+            gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
         });
         multiPlayerBtn.setOnAction((ActionEvent event) -> {
             sceneID = 1;
             gameMode = 1;
             currentScene.setRoot(gameRoot);
+            gameBoxes[yPos][xPos].requestFocus();
+            gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
         });
         exitBtn.setOnAction((ActionEvent event) -> {

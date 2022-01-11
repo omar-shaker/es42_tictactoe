@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="es42_tictactoe.jar" size="11664" download="eager" />
+    <jar href="es42_tictactoe.jar" size="11682" download="eager" />
     <jar href="lib\jinput.jar" size="213608" download="eager" />
   </resources>
   <jfx:javafx-desc  width="800" height="600" main-class="es42_tictactoe.Es42_tictactoe"  name="es42_tictactoe" />
