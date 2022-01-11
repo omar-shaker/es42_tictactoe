@@ -44,6 +44,8 @@ public class Es42_tictactoe extends Application {
     public int yPos = 0;
     public int xTurn = 1;
     public boolean userWin = false;
+    public boolean compWin = false;
+    public boolean winner = false;
     public int[] playerScore = new int[2];
     public TextField xScore = new TextField();
     public TextField oScore = new TextField();
@@ -80,6 +82,7 @@ public class Es42_tictactoe extends Application {
     public static char computer = 'o', user = 'x';
 
     public Label statusLabel = new Label("");
+    public Label loadingLabel = new Label("Loading...");
     public BackgroundSize size = new BackgroundSize(20, 20, false, false, true, false);
     public StackPane homeRoot = new StackPane();
     public StackPane gameRoot = new StackPane();
@@ -348,8 +351,11 @@ public class Es42_tictactoe extends Application {
 
         statusLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.LIME);
+        loadingLabel.setFont(new Font(50));
+        loadingLabel.setTextFill(Color.LIME);
         homeRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/HoverSmall.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
-        homeRoot.getChildren().addAll(btnsBox, exitLabelBtn, selectLabelBtn);
+        homeRoot.getChildren().addAll(btnsBox, exitLabelBtn, selectLabelBtn, loadingLabel);
+        StackPane.setAlignment(loadingLabel, Pos.TOP_CENTER);
         StackPane.setAlignment(exitLabelBtn, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(selectLabelBtn, Pos.BOTTOM_RIGHT);
         gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
@@ -361,11 +367,32 @@ public class Es42_tictactoe extends Application {
         StackPane.setAlignment(statusLabel, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(mainMenuLabelBtn, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(playAgainLabelBtn, Pos.BOTTOM_RIGHT);
+        loadingLabel.setVisible(false);
 
         singlePlayerBtn.setOnAction((ActionEvent event) -> {
+            loadingLabel.setVisible(true);
+            gameTile.setVisible(false);
+            saveBackBtn.setVisible(false);
+            backBtn.setVisible(false);
+            scoreBox.setVisible(false);
             sceneID = 1;
             gameMode = 0;
-            currentScene.setRoot(gameRoot);
+            PauseTransition delay = new PauseTransition(Duration.millis(15));
+            delay.setOnFinished(x -> {
+                loadingLabel.setVisible(false);
+                gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/SinglePlayer.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
+                currentScene.setRoot(gameRoot);
+            });
+            delay.play();
+            PauseTransition delay2 = new PauseTransition(Duration.seconds(9));
+            delay2.setOnFinished(x -> {
+                gameTile.setVisible(true);
+                saveBackBtn.setVisible(true);
+                backBtn.setVisible(true);
+                scoreBox.setVisible(true);
+            });
+            delay2.play();
+
             gameBoxes[yPos][xPos].requestFocus();
             gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
@@ -373,6 +400,7 @@ public class Es42_tictactoe extends Application {
         multiPlayerBtn.setOnAction((ActionEvent event) -> {
             sceneID = 1;
             gameMode = 1;
+            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
             currentScene.setRoot(gameRoot);
             gameBoxes[yPos][xPos].requestFocus();
             gameBoxes[yPos][xPos].deselect();
@@ -388,7 +416,7 @@ public class Es42_tictactoe extends Application {
             playerScore[1] = 0;
             xScore.setText("X Score: " + playerScore[0]);
             oScore.setText("O Score: " + playerScore[1]);
-            userWin = false;
+            userWin = compWin = winner = false;
             clearMiniBoard();
             clearBoard();
             currentScene.setRoot(homeRoot);
@@ -483,11 +511,11 @@ public class Es42_tictactoe extends Application {
                                 case 1://gameScene
                                     if (stickValue == 1.0f) {
                                         switch (gameBoxes[yPos][xPos].getText()) {
-                                            case "o":
+                                            case "O":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: blue;-fx-background-color: white;");
                                                 break;
 
-                                            case "x":
+                                            case "X":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: red;-fx-background-color: white;");
                                                 break;
 
@@ -501,11 +529,11 @@ public class Es42_tictactoe extends Application {
                                         }
                                     } else if (stickValue == -1.0f) {
                                         switch (gameBoxes[yPos][xPos].getText()) {
-                                            case "o":
+                                            case "O":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: blue;-fx-background-color: white;");
                                                 break;
 
-                                            case "x":
+                                            case "X":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: red;-fx-background-color: white;");
                                                 break;
 
@@ -539,11 +567,11 @@ public class Es42_tictactoe extends Application {
                                 case 1://gameScene
                                     if (stickValue == 1.0f) {
                                         switch (gameBoxes[yPos][xPos].getText()) {
-                                            case "o":
+                                            case "O":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: blue;-fx-background-color: white;");
                                                 break;
 
-                                            case "x":
+                                            case "X":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: red;-fx-background-color: white;");
                                                 break;
 
@@ -557,11 +585,11 @@ public class Es42_tictactoe extends Application {
                                         }
                                     } else if (stickValue == -1.0f) {
                                         switch (gameBoxes[yPos][xPos].getText()) {
-                                            case "o":
+                                            case "O":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: blue;-fx-background-color: white;");
                                                 break;
 
-                                            case "x":
+                                            case "X":
                                                 gameBoxes[yPos][xPos].setStyle("-fx-text-fill: red;-fx-background-color: white;");
                                                 break;
 
@@ -609,7 +637,7 @@ public class Es42_tictactoe extends Application {
                                         break;
                                     }
                                     Platform.runLater(() -> {
-                                        userWin = false;
+                                        userWin = compWin = winner = false;
                                         sceneID = 1;
                                         movesCount = 0;
                                         currentScene.setRoot(gameRoot);
@@ -632,9 +660,9 @@ public class Es42_tictactoe extends Application {
                                             if (stickValue == 0) {
                                                 break;
                                             }
-                                            if (gameBoxes[yPos][xPos].getText().equals("")) {
+                                            if (gameBoxes[yPos][xPos].getText().equals("") && !compWin) {
                                                 gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-inner-color: red");
-                                                gameBoxes[yPos][xPos].setText("x");
+                                                gameBoxes[yPos][xPos].setText("X");
                                                 if (gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][1].getText()) && gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][2].getText())) {
                                                     userWin = true;
                                                     playerScore[xTurn]++;//Player won
@@ -738,10 +766,11 @@ public class Es42_tictactoe extends Application {
                                                         Move perfectMove = findBestMove();
                                                         minimaxBoard[perfectMove.row][perfectMove.col] = 'o';
                                                         gameBoxes[perfectMove.row][perfectMove.col].setStyle("-fx-text-inner-color: blue");
-                                                        gameBoxes[perfectMove.row][perfectMove.col].setText("o");
+                                                        gameBoxes[perfectMove.row][perfectMove.col].setText("O");
                                                         if (evaluate() == 10) {//Computer won
                                                             oScore.setText("O Score: " + (++playerScore[1]));
-                                                            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                            compWin = true;
+                                                            PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                             delay.setOnFinished(x -> {
                                                                 clearMiniBoard();
                                                                 clearBoard();
@@ -760,24 +789,20 @@ public class Es42_tictactoe extends Application {
                                                             delay.play();
                                                         }
                                                     }
-                                                    if (evaluate() == 0 && !isMovesLeft()) {
-                                                        PauseTransition delay = new PauseTransition(Duration.seconds(2));
-                                                        delay.setOnFinished(x -> {
-                                                            clearMiniBoard();
-                                                            clearBoard();
-                                                            sceneID = 2;
-                                                            statusLabel.setText("Draw");
-                                                            statusRoot.setBackground(
-                                                                    new Background(
-                                                                            new BackgroundImage(
-                                                                                    new Image("file:images/Draw.gif"),
-                                                                                    BackgroundRepeat.NO_REPEAT,
-                                                                                    BackgroundRepeat.NO_REPEAT,
-                                                                                    BackgroundPosition.CENTER,
-                                                                                    size)));
-                                                            currentScene.setRoot(statusRoot);
-                                                        });
-                                                        delay.play();
+                                                    if (evaluate() == 0 && !isMovesLeft()) {//Draw
+                                                        sceneID = 2;
+                                                        statusLabel.setText("Draw");
+                                                        statusRoot.setBackground(
+                                                                new Background(
+                                                                        new BackgroundImage(
+                                                                                new Image("file:images/Draw.gif"),
+                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                BackgroundPosition.CENTER,
+                                                                                size)));
+                                                        currentScene.setRoot(statusRoot);
+                                                        clearMiniBoard();
+                                                        clearBoard();
                                                     }
                                                 }
                                             }
@@ -787,30 +812,31 @@ public class Es42_tictactoe extends Application {
                                             if (stickValue == 0) {
                                                 break;
                                             }
-                                            if (gameBoxes[yPos][xPos].getText().equals("")) {
+                                            if (gameBoxes[yPos][xPos].getText().equals("") && !winner) {
                                                 switch (xTurn) {
                                                     case 0:
                                                         gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-inner-color: blue");
-                                                        gameBoxes[yPos][xPos].setText("o");
+                                                        gameBoxes[yPos][xPos].setText("O");
                                                         xTurn = 1;
                                                         movesCount++;
                                                         break;
 
                                                     case 1:
                                                         gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-inner-color: red");
-                                                        gameBoxes[yPos][xPos].setText("x");
+                                                        gameBoxes[yPos][xPos].setText("X");
                                                         xTurn = 0;
                                                         movesCount++;
                                                         break;
                                                 }
                                                 if (gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][1].getText()) && gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][2].getText())) {
                                                     playerScore[xTurn]++;//Player won
+                                                    winner = true;
                                                     xScore.setText("X Score: " + playerScore[0]);
                                                     oScore.setText("O Score: " + playerScore[1]);
                                                     gameBoxes[yPos][0].setStyle("-fx-background-color: lime");
                                                     gameBoxes[yPos][1].setStyle("-fx-background-color: lime");
                                                     gameBoxes[yPos][2].setStyle("-fx-background-color: lime");
-                                                    PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                    PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                     delay.setOnFinished(x -> {
                                                         clearBoard();
                                                         sceneID = 2;
@@ -845,12 +871,13 @@ public class Es42_tictactoe extends Application {
                                                     delay.play();
                                                 } else if (gameBoxes[0][xPos].getText().equals(gameBoxes[1][xPos].getText()) && gameBoxes[0][xPos].getText().equals(gameBoxes[2][xPos].getText())) {
                                                     playerScore[xTurn]++;//Player Won
+                                                    winner = true;
                                                     xScore.setText("X Score: " + playerScore[0]);
                                                     oScore.setText("O Score: " + playerScore[1]);
                                                     gameBoxes[0][xPos].setStyle("-fx-background-color: lime");
                                                     gameBoxes[1][xPos].setStyle("-fx-background-color: lime");
                                                     gameBoxes[2][xPos].setStyle("-fx-background-color: lime");
-                                                    PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                    PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                     delay.setOnFinished(x -> {
                                                         clearBoard();
                                                         sceneID = 2;
@@ -886,12 +913,13 @@ public class Es42_tictactoe extends Application {
                                                 } else if (xPos == yPos) {
                                                     if (gameBoxes[0][0].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][0].getText().equals(gameBoxes[2][2].getText())) {
                                                         playerScore[xTurn]++;//Player Won
+                                                        winner = true;
                                                         xScore.setText("X Score: " + playerScore[0]);
                                                         oScore.setText("O Score: " + playerScore[1]);
                                                         gameBoxes[0][0].setStyle("-fx-background-color: lime");
                                                         gameBoxes[1][1].setStyle("-fx-background-color: lime");
                                                         gameBoxes[2][2].setStyle("-fx-background-color: lime");
-                                                        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                        PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                         delay.setOnFinished(x -> {
                                                             clearBoard();
                                                             sceneID = 2;
@@ -928,12 +956,13 @@ public class Es42_tictactoe extends Application {
                                                 } else if ((xPos + yPos) == 2) {
                                                     if (gameBoxes[0][2].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][2].getText().equals(gameBoxes[2][0].getText())) {
                                                         playerScore[xTurn]++;//Player Won
+                                                        winner = true;
                                                         xScore.setText("X Score: " + playerScore[0]);
                                                         oScore.setText("O Score: " + playerScore[1]);
                                                         gameBoxes[0][2].setStyle("-fx-background-color: lime");
                                                         gameBoxes[1][1].setStyle("-fx-background-color: lime");
                                                         gameBoxes[2][0].setStyle("-fx-background-color: lime");
-                                                        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                        PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                         delay.setOnFinished(x -> {
                                                             clearBoard();
                                                             sceneID = 2;
@@ -967,8 +996,9 @@ public class Es42_tictactoe extends Application {
                                                         });
                                                         delay.play();
                                                     }
-                                                } else if (movesCount == 9) {
-                                                    PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                                                }
+                                                if (movesCount == 9 && !winner) {
+                                                    PauseTransition delay = new PauseTransition(Duration.seconds(1));
                                                     delay.setOnFinished(x -> {
                                                         clearBoard();
                                                         sceneID = 2;
@@ -1007,6 +1037,7 @@ public class Es42_tictactoe extends Application {
 
                                 case 2://win & lose scene
                                     Platform.runLater(() -> {
+                                        userWin = compWin = winner = false;
                                         sceneID = 0;
                                         movesCount = 0;
                                         playerScore[0] = 0;
