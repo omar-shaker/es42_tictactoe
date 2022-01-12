@@ -296,6 +296,7 @@ public class Es42_tictactoe extends Application {
         oScore.setMaxWidth(150);
         xScore.setText("X Score: " + playerScore[0]);
         oScore.setText("O Score: " + playerScore[1]);
+        xScore.setStyle("-fx-background-color: lime");
         scoreBox.getChildren().addAll(xScore, oScore);
         scoreBox.setSpacing(20);
 
@@ -368,15 +369,14 @@ public class Es42_tictactoe extends Application {
         loadingLabel.setFont(new Font(50));
         loadingLabel.setTextFill(Color.LIME);
         loadingLabel.setVisible(false);
-        saveLabel.setFont(new Font(50));
-        saveLabel.setTextFill(Color.LIME);
+        saveLabel.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 80));
+        saveLabel.setTextFill(Color.DARKRED);
         saveLabel.setVisible(false);
         homeRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/HoverSmall.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
         homeRoot.getChildren().addAll(btnsBox, exitLabelBtn, selectLabelBtn, loadingLabel);
         StackPane.setAlignment(loadingLabel, Pos.TOP_CENTER);
         StackPane.setAlignment(exitLabelBtn, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(selectLabelBtn, Pos.BOTTOM_RIGHT);
-        gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
         gameRoot.getChildren().addAll(gameTile, backBtn, saveBtn, scoreBox, saveLabel);
         StackPane.setAlignment(saveLabel, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(backBtn, Pos.BOTTOM_LEFT);
@@ -411,6 +411,8 @@ public class Es42_tictactoe extends Application {
             });
             delay2.play();
 
+            xScore.setText("X Score: " + playerScore[0]);
+            oScore.setText("O Score: " + playerScore[1]);
             gameBoxes[yPos][xPos].requestFocus();
             gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
@@ -418,8 +420,10 @@ public class Es42_tictactoe extends Application {
         multiPlayerBtn.setOnAction((ActionEvent event) -> {
             sceneID = 1;
             gameMode = 1;
-            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
+            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/d.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
             currentScene.setRoot(gameRoot);
+            xScore.setText("X Score: " + playerScore[0]);
+            oScore.setText("O Score: " + playerScore[1]);
             gameBoxes[yPos][xPos].requestFocus();
             gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
@@ -464,8 +468,19 @@ public class Es42_tictactoe extends Application {
             xScore.setText("X Score: " + playerScore[0]);
             oScore.setText("O Score: " + playerScore[1]);
             sceneID = 1;
-            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
+            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/a.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
             currentScene.setRoot(gameRoot);
+            switch (xTurn) {
+                case 0:
+                    oScore.setStyle("-fx-background-color: lime");
+                    xScore.setStyle(defaultStyle);
+                    break;
+
+                case 1:
+                    xScore.setStyle("-fx-background-color: lime");
+                    oScore.setStyle(defaultStyle);
+                    break;
+            }
             gameBoxes[yPos][xPos].requestFocus();
             gameBoxes[yPos][xPos].deselect();
             gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
@@ -918,6 +933,8 @@ public class Es42_tictactoe extends Application {
                                                         gameBoxes[yPos][xPos].setText("O");
                                                         xTurn = 1;
                                                         movesCount++;
+                                                        xScore.setStyle("-fx-background-color: lime");
+                                                        oScore.setStyle(defaultStyle);
                                                         break;
 
                                                     case 1:
@@ -925,6 +942,8 @@ public class Es42_tictactoe extends Application {
                                                         gameBoxes[yPos][xPos].setText("X");
                                                         xTurn = 0;
                                                         movesCount++;
+                                                        oScore.setStyle("-fx-background-color: lime");
+                                                        xScore.setStyle(defaultStyle);
                                                         break;
                                                 }
                                                 if (gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][1].getText()) && gameBoxes[yPos][0].getText().equals(gameBoxes[yPos][2].getText())) {
