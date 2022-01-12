@@ -1070,6 +1070,49 @@ public class Es42_tictactoe extends Application {
                                                             }
                                                         });
                                                         delay.play();
+                                                    } else if (yPos == 1) {
+                                                        if (gameBoxes[0][2].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][2].getText().equals(gameBoxes[2][0].getText())) {
+                                                            playerScore[xTurn]++;//Player Won
+                                                            winner = true;
+                                                            xScore.setText("X Score: " + playerScore[0]);
+                                                            oScore.setText("O Score: " + playerScore[1]);
+                                                            gameBoxes[0][2].setStyle("-fx-background-color: lime");
+                                                            gameBoxes[1][1].setStyle("-fx-background-color: lime");
+                                                            gameBoxes[2][0].setStyle("-fx-background-color: lime");
+                                                            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+                                                            delay.setOnFinished(x -> {
+                                                                clearBoard();
+                                                                sceneID = 2;
+                                                                switch (xTurn) {
+                                                                    case 0:
+                                                                        statusLabel.setText("X Won");
+                                                                        statusRoot.setBackground(
+                                                                                new Background(
+                                                                                        new BackgroundImage(
+                                                                                                new Image("file:images/XWin.gif"),
+                                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                                BackgroundPosition.CENTER,
+                                                                                                size)));
+                                                                        currentScene.setRoot(statusRoot);
+                                                                        break;
+
+                                                                    case 1:
+                                                                        statusLabel.setText("O Won");
+                                                                        statusRoot.setBackground(
+                                                                                new Background(
+                                                                                        new BackgroundImage(
+                                                                                                new Image("file:images/OWin.gif"),
+                                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                                BackgroundRepeat.NO_REPEAT,
+                                                                                                BackgroundPosition.CENTER,
+                                                                                                size)));
+                                                                        currentScene.setRoot(statusRoot);
+                                                                        break;
+                                                                }
+                                                            });
+                                                            delay.play();
+                                                        }
                                                     }
                                                 } else if ((xPos + yPos) == 2) {
                                                     if (gameBoxes[0][2].getText().equals(gameBoxes[1][1].getText()) && gameBoxes[0][2].getText().equals(gameBoxes[2][0].getText())) {
