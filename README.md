@@ -24,23 +24,23 @@ The two players take turns putting marks on a 3x3 board. The goal of Tic Tac Toe
 ### IMPLEMENTATION PLAN:
 The implementation workflow for this project is as follows:
 
-<p align="center"><img src="flowchart.png" width="430" height="400" /></p>
+<p align="center"><img src="/readmepics/flowchart.png" width="430" height="400" /></p>
 
 In order to visualize the defined game rules and description, the game is shown in Figures below.
 
 First the game will start with empty board.<br/>
 
-<p align="center"><img src="start.jpg" width="400" height="200" /></p>
+<p align="center"><img src="/readmepics/start.jpg" width="400" height="200" /></p>
 
 Then Player X will make his/her first move by playing mark “X” on this board. Then Player O will make his/her move by playing mark “O” on this board. This will keep on continuing until the board is full of marks.
 
 Then the program will check if Player X or Player O won and that scenario will be follows: (could be vertically, horizontally or diagonally).  
 
-<p align="center"><img src="xwin.jpg" width="400" height="200" /></p>
+<p align="center"><img src="/readmepics/xwin.jpg" width="400" height="200" /></p>
 
 If none of the players win, the program will check for draw.
 
-<p align="center"><img src="draw.jpg" width="400" height="200" /></p>
+<p align="center"><img src="/readmepics/draw.jpg" width="400" height="200" /></p>
 
 All this decision making is done by using Minimax algorithm.
 
@@ -56,7 +56,7 @@ Its goal is to minimize the maximum loss i.e. minimize the worst case scenario.
 
 To apply this, let's take an example from near the end of a game, where it is my turn. I am X. My goal here, obviously, is to maximize my end game score.
 
-<p align="center"><img src="Minimax_1.png" width="450" height="290" /></p>
+<p align="center"><img src="/readmepics/Minimax_1.png" width="450" height="290" /></p>
 
 If the top of this image represents the state of the game when it is my turn, then I have some choices to make, there are three places I can play, one of which clearly results in me wining and earning the 10 points. If I don't make that move, O could very easily win. And I don't want O to win, so my goal here, as the first player, should be to pick the maximum scoring move.
 
@@ -64,7 +64,7 @@ If the top of this image represents the state of the game when it is my turn, th
 
 We should assume that O is also playing to win this game, but relative to us, the first player, O wants obviously wants to chose the move that results in the worst score for us, it wants to pick a move that would minimize our ultimate score. Let's look at things from O's perspective, starting with the two other game states from above in which we don't immediately win.
 
-<p align="center"><img src="Minimax_2.png" width="450" height="290" /></p>
+<p align="center"><img src="/readmepics/Minimax_2.png" width="450" height="290" /></p>
 
 The choice is clear, O would pick any of the moves that result in a score of -10.
 
@@ -83,7 +83,7 @@ A description for the algorithm, assuming X is the turn taking player:
 
 Let's walk through the algorithm's execution with the full move tree, and algorithmically, how the instant winning move will be picked:
 
-<p align="center"><img src="Minimax_3.png" width="450" height="290" /></p>
+<p align="center"><img src="/readmepics/Minimax_3.png" width="450" height="290" /></p>
 
 * It's X's turn in state 1. X generates the states 2, 3, and 4 and calls minimax on those states.
 * State 2 pushes the score of +10 to state 1's score list, because the game is in an end state.
@@ -95,7 +95,7 @@ Let's walk through the algorithm's execution with the full move tree, and algori
 
 Let's see what is happening here by looking through the possible move tree:
 
-<p align="center"><img src="Minimax_4.png" width="450" height="290" /></p>
+<p align="center"><img src="/readmepics/Minimax_4.png" width="450" height="290" /></p>
 
 * Given the board state 1 where both players are playing perfectly, and O is the computer player. O choses the move in state 5 and then immediately loses when X wins in state 9.
 * But if O blocks X's win as in state 3, X will obviously block O's potential win as shown in state 7.
