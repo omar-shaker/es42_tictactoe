@@ -1,5 +1,13 @@
 package es42_tictactoe;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -64,14 +72,15 @@ public class Es42_tictactoe extends Application {
     public int previousMenuPos = 0;
     public Button singlePlayerBtn = new Button();
     public Button multiPlayerBtn = new Button();
+    public Button loadBtn = new Button();
     public Button exitBtn = new Button();
     public Button backBtn = new Button();
-    public Button saveBackBtn = new Button();
+    public Button saveBtn = new Button();
     public Button exitLabelBtn = new Button();
     public Button selectLabelBtn = new Button();
     public Button playAgainLabelBtn = new Button();
     public Button mainMenuLabelBtn = new Button();
-    public Button[] menuBtns = new Button[3];
+    public Button[] menuBtns = new Button[4];
     public VBox btnsBox = new VBox();
 
     public TilePane gameTile = new TilePane();
@@ -83,6 +92,7 @@ public class Es42_tictactoe extends Application {
 
     public Label statusLabel = new Label("");
     public Label loadingLabel = new Label("Loading...");
+    public Label saveLabel = new Label("Saved");
     public BackgroundSize size = new BackgroundSize(20, 20, false, false, true, false);
     public StackPane homeRoot = new StackPane();
     public StackPane gameRoot = new StackPane();
@@ -291,9 +301,10 @@ public class Es42_tictactoe extends Application {
 
         singlePlayerBtn.setText("Single player");
         multiPlayerBtn.setText("Multi player");
+        loadBtn.setText("Load game");
         exitBtn.setText("Exit");
         backBtn.setText("  Back");
-        saveBackBtn.setText("  Save");
+        saveBtn.setText("  Save");
         exitLabelBtn.setText("  Exit");
         selectLabelBtn.setText("  Select");
         playAgainLabelBtn.setText("  Play Again");
@@ -303,21 +314,23 @@ public class Es42_tictactoe extends Application {
         playAgainLabelBtn.setBackground(new Background(new BackgroundImage(new Image("file:images/o.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(20, 20, false, false, true, false))));
         mainMenuLabelBtn.setBackground(new Background(new BackgroundImage(new Image("file:images/square.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(20, 20, false, false, true, false))));
         backBtn.setBackground(new Background(new BackgroundImage(new Image("file:images/o.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(20, 20, false, false, true, false))));
-        saveBackBtn.setBackground(new Background(new BackgroundImage(new Image("file:images/square.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(20, 20, false, false, true, false))));
+        saveBtn.setBackground(new Background(new BackgroundImage(new Image("file:images/square.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(20, 20, false, false, true, false))));
         singlePlayerBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         multiPlayerBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+        loadBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         exitBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         backBtn.setStyle("-fx-text-fill: lime");
-        saveBackBtn.setStyle("-fx-text-fill: lime");
+        saveBtn.setStyle("-fx-text-fill: lime");
         exitLabelBtn.setStyle("-fx-text-fill: lime");
         selectLabelBtn.setStyle("-fx-text-fill: lime");
         playAgainLabelBtn.setStyle("-fx-text-fill: lime");
         mainMenuLabelBtn.setStyle("-fx-text-fill: lime");
         singlePlayerBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 30));
         multiPlayerBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        loadBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 30));
         exitBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 30));
         backBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
-        saveBackBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
+        saveBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
         exitLabelBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
         selectLabelBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
         playAgainLabelBtn.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 50));
@@ -325,9 +338,10 @@ public class Es42_tictactoe extends Application {
 
         menuBtns[0] = singlePlayerBtn;
         menuBtns[1] = multiPlayerBtn;
-        menuBtns[2] = exitBtn;
+        menuBtns[2] = loadBtn;
+        menuBtns[3] = exitBtn;
         btnsBox.setSpacing(25);
-        btnsBox.getChildren().addAll(singlePlayerBtn, multiPlayerBtn, exitBtn);
+        btnsBox.getChildren().addAll(singlePlayerBtn, multiPlayerBtn, loadBtn, exitBtn);
         btnsBox.setAlignment(Pos.CENTER);
 
         gameTile.setPrefColumns(3);
@@ -353,26 +367,30 @@ public class Es42_tictactoe extends Application {
         statusLabel.setTextFill(Color.LIME);
         loadingLabel.setFont(new Font(50));
         loadingLabel.setTextFill(Color.LIME);
+        loadingLabel.setVisible(false);
+        saveLabel.setFont(new Font(50));
+        saveLabel.setTextFill(Color.LIME);
+        saveLabel.setVisible(false);
         homeRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/HoverSmall.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
         homeRoot.getChildren().addAll(btnsBox, exitLabelBtn, selectLabelBtn, loadingLabel);
         StackPane.setAlignment(loadingLabel, Pos.TOP_CENTER);
         StackPane.setAlignment(exitLabelBtn, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(selectLabelBtn, Pos.BOTTOM_RIGHT);
         gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
-        gameRoot.getChildren().addAll(gameTile, backBtn, saveBackBtn, scoreBox);
+        gameRoot.getChildren().addAll(gameTile, backBtn, saveBtn, scoreBox, saveLabel);
+        StackPane.setAlignment(saveLabel, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(backBtn, Pos.BOTTOM_LEFT);
-        StackPane.setAlignment(saveBackBtn, Pos.BOTTOM_RIGHT);
+        StackPane.setAlignment(saveBtn, Pos.BOTTOM_RIGHT);
         StackPane.setAlignment(scoreBox, Pos.TOP_LEFT);
         statusRoot.getChildren().addAll(statusLabel, mainMenuLabelBtn, playAgainLabelBtn);
         StackPane.setAlignment(statusLabel, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(mainMenuLabelBtn, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(playAgainLabelBtn, Pos.BOTTOM_RIGHT);
-        loadingLabel.setVisible(false);
 
         singlePlayerBtn.setOnAction((ActionEvent event) -> {
             loadingLabel.setVisible(true);
             gameTile.setVisible(false);
-            saveBackBtn.setVisible(false);
+            saveBtn.setVisible(false);
             backBtn.setVisible(false);
             scoreBox.setVisible(false);
             sceneID = 1;
@@ -387,7 +405,7 @@ public class Es42_tictactoe extends Application {
             PauseTransition delay2 = new PauseTransition(Duration.seconds(9));
             delay2.setOnFinished(x -> {
                 gameTile.setVisible(true);
-                saveBackBtn.setVisible(true);
+                saveBtn.setVisible(true);
                 backBtn.setVisible(true);
                 scoreBox.setVisible(true);
             });
@@ -400,6 +418,52 @@ public class Es42_tictactoe extends Application {
         multiPlayerBtn.setOnAction((ActionEvent event) -> {
             sceneID = 1;
             gameMode = 1;
+            gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
+            currentScene.setRoot(gameRoot);
+            gameBoxes[yPos][xPos].requestFocus();
+            gameBoxes[yPos][xPos].deselect();
+            gameBoxes[yPos][xPos].setStyle("-fx-background-color: grey; -fx-text-fill: white");
+        });
+        loadBtn.setOnAction((ActionEvent event) -> {
+            try {
+                FileReader fr = new FileReader("save.txt");
+                BufferedReader br = new BufferedReader(fr);
+                playerScore[0] = Integer.decode(br.readLine());
+                playerScore[1] = Integer.decode(br.readLine());
+                xTurn = Integer.decode(br.readLine());
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameBoxes[i][j].setText(br.readLine());
+                        switch (gameBoxes[i][j].getText()) {
+                            case "X":
+                                gameBoxes[i][j].setStyle("-fx-text-inner-color: red");
+                                break;
+
+                            case "O":
+                                gameBoxes[i][j].setStyle("-fx-text-inner-color: blue");
+                                break;
+                        }
+                    }
+                }
+                gameMode = Integer.decode(br.readLine());
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        minimaxBoard[i][j] = (char) br.read();
+                    }
+                }
+                br.readLine();
+                movesCount = Integer.decode(br.readLine());
+                br.close();
+                fr.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Es42_tictactoe.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Es42_tictactoe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            xScore.setText("X Score: " + playerScore[0]);
+            oScore.setText("O Score: " + playerScore[1]);
+            sceneID = 1;
             gameRoot.setBackground(new Background(new BackgroundImage(new Image("file:images/Game.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size)));
             currentScene.setRoot(gameRoot);
             gameBoxes[yPos][xPos].requestFocus();
@@ -421,9 +485,44 @@ public class Es42_tictactoe extends Application {
             clearBoard();
             currentScene.setRoot(homeRoot);
         });
-        saveBackBtn.setOnAction((ActionEvent event) -> {
-            sceneID = 0;
-            currentScene.setRoot(homeRoot);
+        saveBtn.setOnAction((ActionEvent event) -> {
+            saveLabel.setVisible(true);
+            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            delay.setOnFinished(x -> {
+                saveLabel.setVisible(false);
+            });
+            delay.play();
+            try {
+                FileWriter fw = new FileWriter("save.txt");
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(String.valueOf(playerScore[0]));
+                bw.newLine();
+                bw.write(String.valueOf(playerScore[1]));
+                bw.newLine();
+                bw.write(String.valueOf(xTurn));
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        bw.newLine();
+                        bw.write(gameBoxes[i][j].getText());
+                    }
+                }
+                bw.newLine();
+                bw.write(String.valueOf(gameMode));
+                bw.newLine();
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        bw.write(minimaxBoard[i][j]);
+                    }
+                }
+                bw.newLine();
+                bw.write(String.valueOf(movesCount));
+                bw.close();
+                fw.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Es42_tictactoe.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Es42_tictactoe.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         new Thread(() -> {
@@ -492,14 +591,14 @@ public class Es42_tictactoe extends Application {
                                     if (stickValue == 1.0f) {
                                         previousMenuPos = currentMenuPos;
                                         currentMenuPos++;
-                                        if (currentMenuPos > 2) {
+                                        if (currentMenuPos > 3) {
                                             currentMenuPos = 0;
                                         }
                                     } else if (stickValue == -1.0f) {
                                         previousMenuPos = currentMenuPos;
                                         currentMenuPos--;
                                         if (currentMenuPos < 0) {
-                                            currentMenuPos = 2;
+                                            currentMenuPos = 3;
                                         }
                                     }
                                     Platform.runLater(() -> {
@@ -1031,7 +1130,7 @@ public class Es42_tictactoe extends Application {
                             switch (sceneID) {
                                 case 1://gameScene
                                     Platform.runLater(() -> {
-                                        saveBackBtn.fire();
+                                        saveBtn.fire();
                                     });
                                     break;
 
